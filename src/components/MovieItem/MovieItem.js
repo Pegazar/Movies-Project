@@ -1,29 +1,77 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import "./MovieItem.css";
-import { addToList } from '../../redux/actions/actions';
+import React, { useState }
+    from 'react';
+import {
+    Alert,
+    AlertIcon,
+    Stack
+} from '@chakra-ui/react'
+import { useDispatch, useSelector } from 'react-redux';
+import { addToList } from "../../redux/actions/actions";
+import './MovieItem.css';
 
-function MovieItem(props) {
 
-  const dispatch = useDispatch()
 
-  const addList = () => {
-    dispatch(addToList(props))
-  }
+const MovieItem = (props) => {
 
-  return (
-    <article className="movie-item">
-      <img className="movie-item__poster" src={props?.Poster} alt={props?.Title} />
-      <div className="movie-item__info">
-        <h3 className="movie-item__title">
-          {props?.Title}&nbsp;({props?.Year})
-        </h3>
-        <button type="button" className="movie-item__add-button" onClick={addList}>
-          Add to list
-        </button>
-      </div>
-    </article>
-  );
+    const [statusAdd, setStatusAdd] = useState(false)
+    const [statusHave, setStatusHave] = useState(false)
+    const dispatch = useDispatch()
+    const { list } = useSelector(state => state)
+
+    const addList = (paramProps) => {
+        if (!list.find(item => item.imdbID === paramProps.imdbID)) {
+            dispatch(addToList(props))
+            setStatusAdd(true)
+            setTimeout(() => {
+                setStatusAdd(false)
+            }, 900)
+        } else {
+            setStatusHave(true)
+            setTimeout(() => {
+                setStatusHave(false)
+            }, 900)
+        }
+
+
+
+    }
+
+    return (
+        <article className="movie-item">
+            {props?.Poster === "N/A" ?
+                <img className="movie-item__poster"
+                    src="https://media.comicbook.com/files/img/default-movie.png"
+                    alt={props?.Title} />
+                : <img className="movie-item__poster"
+                    src={props?.Poster} alt={props?.Title} />
+            }
+
+            <div className="movie-item__info">
+                <h3 className="movie-item__title">{props?.Title}&nbsp;({props?.Year})</h3>
+                <button type="button" className="movie-item__add-button" onClick={() => { addList(props) }}>Add to list</button>
+            </div>
+
+
+            {statusAdd ? <div className='alert'>
+                <Stack>
+                    <Alert status='success' variant='solid' bgColor="blue.500">
+                        <AlertIcon style={{"width" : "20px", "height": "20px", "padding-right": "10px"}} />
+                        Added a movie to the list !
+                    </Alert>
+                </Stack>
+            </div> : null}
+
+            {statusHave ? <div className='alert'>
+                <Stack>
+                    <Alert status='error' variant='solid' >
+                        <AlertIcon style={{"width" : "20px", "height": "20px", "padding-right": "10px"}} />
+                        The movie is already in the list !
+                    </Alert>
+                </Stack>
+            </div> : null}
+
+        </article>
+    )
 }
 
-export default MovieItem;
+export default MovieItem

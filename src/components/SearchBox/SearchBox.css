@@ -16,8 +16,12 @@
     font-size: 14px;
     padding: 5px 10px;
     border: 1px solid rgba(0, 8, 7, .5);
+    outline: none;
 }
-
+.search-box__form-input:focus{
+    border-color: blueviolet;
+    box-shadow: 2px 4px 20px 1px rgb(45 45 45 / 13%);
+}
 .search-box__form-submit {
     margin-top: 17px;
     padding: 5px 10px;

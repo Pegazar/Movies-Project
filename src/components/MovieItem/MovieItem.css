@@ -7,6 +7,7 @@
 .movie-item__poster {
     height: 150px;
     margin-right: 21px;
+    width: 110px;
 }
 
 .movie-item__title {
@@ -28,4 +29,10 @@
     cursor: pointer;
     opacity: 0.9;
     transition: all 0.2s linear;
+}
+
+.alert {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
 }
